@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-
-import { Heroe } from './../interfaces/heroe';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +26,10 @@ export class HeroesService {
     this.page = 0;
   }
 
+  getRequest(url: string, headers?: object) {
+    return this.http.get<any>(url);
+  }
+
   getHeroes(nameStartsWith?: string, page?: number) {
     if (page || page === 0) {
       this.page = page;
@@ -44,26 +45,7 @@ export class HeroesService {
       offset +
       (nameStartsWith ? '&nameStartsWith=' + nameStartsWith : '');
 
-    return this.http.get<any>(url).pipe(
-      map(({ data }) => {
-        const resultHeroes: Array<Heroe> = [];
-        this.total = Math.ceil(data.total / this.step);
-
-        data.results.forEach((item: any) => {
-          resultHeroes.push({
-            id: item.id,
-            name: item.name,
-            description: item.description,
-            modified: item.modified,
-            thumbnail: item.thumbnail,
-            resourceURI: item.resourceURI,
-            teamColor: this.getTeamColor(item.id),
-          });
-        });
-
-        return resultHeroes;
-      })
-    );
+    return this.getRequest(url);
   }
 
   getHeroe(id: any) {
@@ -74,19 +56,7 @@ export class HeroesService {
       id +
       '?apikey=56d2cc44b1c84eb7c6c9673565a9eb4b';
 
-    return this.http.get<any>(url).pipe(
-      map(({ data: { results } }) => {
-        return {
-          id: results[0].id,
-          name: results[0].name,
-          description: results[0].description,
-          modified: results[0].modified,
-          thumbnail: results[0].thumbnail,
-          resourceURI: results[0].resourceURI,
-          teamColor: this.getTeamColor(results[0].id),
-        };
-      })
-    );
+    return this.getRequest(url);
   }
 
   getTeamColor(id: any): string {

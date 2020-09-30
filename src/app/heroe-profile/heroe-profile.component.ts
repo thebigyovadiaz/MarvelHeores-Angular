@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { HeroesService } from '../services/heroes.service';
 import { Heroe } from './../interfaces/heroe';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-heroe-profile',
@@ -41,9 +42,31 @@ export class HeroeProfileComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.id = params.id;
-      this.heroesService.getHeroe(this.id).subscribe((data: any) => {
-        this.heroe = data;
-      });
+      this.heroesServicesMapping(this.heroesService.getHeroe(this.id));
     });
+  }
+
+  parsingHeroData(hero: Array<any>) {
+    return {
+      id: hero[0].id,
+      name: hero[0].name,
+      description: hero[0].description,
+      modified: hero[0].modified,
+      thumbnail: hero[0].thumbnail,
+      resourceURI: hero[0].resourceURI,
+      teamColor: this.heroesService.getTeamColor(hero[0].id),
+    };
+  }
+
+  heroesServicesMapping(request: any) {
+    request
+      .pipe(
+        map(({ data: { results } }) => {
+          return this.parsingHeroData(results);
+        })
+      )
+      .subscribe((heroe) => {
+        this.heroe = heroe;
+      });
   }
 }

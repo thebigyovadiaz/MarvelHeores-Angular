@@ -8,9 +8,6 @@
         </div>
       </form>
     </div>
-    <div *ngIf="!heroes.length">
-      <h4>Sin resultados para la búsqueda</h4>
-    </div>
     <div class="col-xs-12 col-sm-6 col-md-3" *ngFor="let heroe of heroes">
       <a [routerLink]="['/heroe', heroe.id]" class="hero-entry" [style.border-color]="heroesService['group_colors'][heroe.teamColor]" [style.background-image]="'url(' + heroe.thumbnail.path + '.' + heroe.thumbnail.extension + ')'">
         <span>{{heroe.name}}</span>
@@ -18,8 +15,8 @@
     </div>
     <div class="paginator col-xs-12">
       <a class="paginator-prev" (click)="prevPage()" *ngIf="heroesService.page > 0">Prev</a>
-      Página {{heroesService.page + 1}} de {{heroesService.total}}
-      <a class="paginator-next" (click)="nextPage()" *ngIf="heroesService.page < heroesService.total - 1">Next</a>
+      Página {{heroesService.page + 1}} de {{total}}
+      <a class="paginator-next" (click)="nextPage()" *ngIf="heroesService.page < total - 1">Next</a>
     </div>
   </div>
 </div>
