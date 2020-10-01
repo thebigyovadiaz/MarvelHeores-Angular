@@ -1,4 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed
+} from '@angular/core/testing';
+
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
+
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { HeroeProfileComponent } from './heroe-profile.component';
 
@@ -8,9 +18,9 @@ describe('HeroeProfileComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HeroeProfileComponent ]
-    })
-    .compileComponents();
+      imports: [HttpClientTestingModule, RouterTestingModule],
+      declarations: [HeroeProfileComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
